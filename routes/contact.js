@@ -36,18 +36,14 @@ router.post("/", async (req, res) => {
   }
 
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    requireTLS: true,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  host: process.env.SMTP_HOST,  // ← smtp-relay.brevo.com
+  port: Number(process.env.SMTP_PORT), // ← 587
+  secure: false,   // ← Brevo 587 pe false hota hai
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
   const safeName = escapeHtml(name);
   const safePhone = escapeHtml(phone);
