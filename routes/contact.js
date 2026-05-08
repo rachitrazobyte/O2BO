@@ -12,6 +12,8 @@ const escapeHtml = (value = "") =>
     .replace(/'/g, "&#39;");
 
 router.post("/", async (req, res) => {
+  console.log("Contact request received:", new Date().toISOString());
+
   const { name, phone, email, company, message } = req.body;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -35,6 +37,9 @@ router.post("/", async (req, res) => {
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
@@ -65,10 +70,14 @@ router.post("/", async (req, res) => {
       `,
     });
 
+    console.log("Contact email sent:", email);
+
     return res.status(200).json({
       message: "Contact form submitted successfully.",
     });
   } catch (error) {
+    console.error("Contact email failed:", error.message);
+
     return res.status(500).json({
       message: "Unable to send email right now. Please try again.",
     });
