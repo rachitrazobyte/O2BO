@@ -11,6 +11,8 @@ const escapeHtml = (value = "") =>
 
 router.post("/", async (req, res) => {
   console.log("Contact request received:", new Date().toISOString());
+  console.log("Contact request received:", new Date().toISOString());
+  console.log("API KEY:", process.env.BREVO_API_KEY?.substring(0, 10));
 
   const { name, phone, email, company, message } = req.body;
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
