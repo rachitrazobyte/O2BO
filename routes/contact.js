@@ -23,7 +23,10 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ message: "Please enter a valid email address." });
   }
 
-  if (!process.env.BREVO_API_KEY || !process.env.CONTACT_EMAIL) {
+  const brevoApiKey = process.env.BREVO_API_KEY?.trim();
+  const contactEmail = process.env.CONTACT_EMAIL?.trim();
+
+  if (!brevoApiKey || !contactEmail) {
     return res.status(500).json({ message: "Email service is not configured." });
   }
 
@@ -38,11 +41,11 @@ router.post("/", async (req, res) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "api-key": process.env.BREVO_API_KEY,
+        "api-key": brevoApiKey,
       },
       body: JSON.stringify({
         sender: { name: "O2BO Contact Form", email: "rachit.razobyte@gmail.com" },
-        to: [{ email: process.env.CONTACT_EMAIL }],
+        to: [{ email: contactEmail }],
         replyTo: { email: email, name: name },
         subject: "New Query - O2BO Contact Form",
         htmlContent: `
